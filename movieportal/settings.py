@@ -204,3 +204,7 @@ DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     EMAIL_HOST_USER or "webmaster@localhost",
 )
+ADMIN_PASSWORD_RESET_EMAIL = os.environ.get(
+    "ADMIN_PASSWORD_RESET_EMAIL",
+    "",
+).strip()

@@ -81,3 +81,42 @@ class AdminPasswordResetTests(TestCase):
         )
 
         self.assertEqual(len(mail.outbox), 0)
+
+    @override_settings(ADMIN_PASSWORD_RESET_EMAIL="recovery@example.com")
+    def test_backup_email_sends_reset_link_to_single_superuser(self):
+        user_model = get_user_model()
+        user_model.objects.create_superuser(
+            username="admin",
+            email="primary@example.com",
+            password="old-password",
+        )
+
+        self.client.post(
+            "/admin/password_reset/",
+            {"email": "recovery@example.com"},
+        )
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["recovery@example.com"])
+        self.assertIn("/admin/reset/", mail.outbox[0].body)
+
+    @override_settings(ADMIN_PASSWORD_RESET_EMAIL="recovery@example.com")
+    def test_backup_email_is_not_used_when_multiple_superusers_exist(self):
+        user_model = get_user_model()
+        user_model.objects.create_superuser(
+            username="admin-one",
+            email="one@example.com",
+            password="old-password",
+        )
+        user_model.objects.create_superuser(
+            username="admin-two",
+            email="two@example.com",
+            password="old-password",
+        )
+
+        self.client.post(
+            "/admin/password_reset/",
+            {"email": "recovery@example.com"},
+        )
+
+        self.assertEqual(len(mail.outbox), 0)
