@@ -1,0 +1,198 @@
+/* ==========================================
+   MOVIEHUB ADMIN — FULL-SCREEN AKHIL LOGO
+   ========================================== */
+
+html,
+body {
+    min-height: 100%;
+    background: #000 !important;
+    color: #fffaf0;
+    font-family: Arial, sans-serif;
+}
+
+/* AKHIL LOGO BACKGROUND */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url("/static/bookingapp/akhil_logo.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    opacity: 0.40;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ADMIN CONTENT */
+
+#container {
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
+}
+
+#main,
+#content,
+#content-main,
+.dashboard {
+    background: transparent !important;
+}
+
+/* TOP NAVIGATION */
+
+#header {
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.90) !important;
+    border-bottom: 1px solid #d4af37;
+}
+
+#branding #site-name a {
+    color: #f5db80 !important;
+    font-weight: bold;
+}
+
+#user-tools,
+#user-tools a {
+    color: #f5db80 !important;
+}
+
+/* DASHBOARD CARDS */
+
+.dashboard .module,
+.module {
+    position: relative;
+    background: rgba(12, 12, 12, 0.80) !important;
+    border: 1px solid #6b5628 !important;
+    border-radius: 10px;
+}
+
+/* GOLD HEADINGS */
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: rgba(35, 28, 13, 0.94) !important;
+    color: #f5db80 !important;
+    border-bottom: 1px solid #d4af37;
+}
+
+/* TABLES */
+
+#result_list,
+.results table {
+    background: rgba(10, 10, 10, 0.90) !important;
+}
+
+#result_list th {
+    background: #211b0e !important;
+    color: #f5db80 !important;
+}
+
+#result_list td {
+    color: #fffaf0;
+}
+
+#result_list tbody tr:nth-child(even) {
+    background: rgba(35, 30, 19, 0.90) !important;
+}
+
+/* LINKS */
+
+#content a:link,
+#content a:visited {
+    color: #f5db80;
+}
+
+#content a:hover {
+    color: #fff;
+}
+
+/* FORM FIELDS */
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    background: rgba(5, 5, 5, 0.96) !important;
+    color: #fffaf0 !important;
+    border: 1px solid #6b5628 !important;
+    border-radius: 5px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #f5db80 !important;
+    outline: 1px solid #d4af37;
+}
+
+/* GOLD BUTTONS */
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+    background: linear-gradient(135deg, #f5db80, #bd9026) !important;
+    color: #100d05 !important;
+    border: 1px solid #d4af37 !important;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    filter: brightness(1.15);
+}
+
+/* SAVE BAR */
+
+.submit-row {
+    background: rgba(15, 13, 9, 0.92) !important;
+    border: 1px solid #6b5628;
+    border-radius: 8px;
+}
+
+/* BREADCRUMBS */
+
+div.breadcrumbs {
+    background: rgba(25, 20, 10, 0.92) !important;
+    color: #f5db80 !important;
+}
+
+/* FILTERS */
+
+#changelist-filter {
+    background: rgba(12, 12, 12, 0.94) !important;
+    border-left: 1px solid #6b5628;
+}
+
+#changelist-filter h2,
+#changelist-filter h3 {
+    color: #f5db80 !important;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    body::before {
+        background-size: contain;
+        opacity: 0.25;
+    }
+
+    #content {
+        padding: 12px;
+    }
+}

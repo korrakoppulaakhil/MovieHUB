@@ -1,0 +1,72 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}
+    MovieHub | Admin Control Center
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}" title="MovieHub Admin Home">
+        <span class="moviehub-movie">MOVIE</span><span class="moviehub-hub">HUB</span>
+        <span class="moviehub-subtitle">ADMIN CONTROL CENTER</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'bookingapp/admin_custom.css' %}?v=6"
+    >
+
+    <style>
+        #header {
+            background: rgba(0, 0, 0, 0.92) !important;
+            border-bottom: 1px solid #d4af37 !important;
+        }
+
+        #branding #site-name {
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        #branding #site-name a {
+            text-decoration: none;
+        }
+
+        .moviehub-movie {
+            color: #f5db80;
+        }
+
+        .moviehub-hub {
+            color: #ffffff;
+        }
+
+        .moviehub-subtitle {
+            display: inline-block;
+            margin-left: 12px;
+            padding-left: 12px;
+            border-left: 1px solid #443820;
+            color: #d4af37;
+            font-size: 10px;
+            letter-spacing: 2px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 600px) {
+            .moviehub-subtitle {
+                display: block;
+                margin: 5px 0 0;
+                padding: 0;
+                border: none;
+                font-size: 9px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

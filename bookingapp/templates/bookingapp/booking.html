@@ -1,0 +1,757 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MovieHub | Book Tickets</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #080b14;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #111827;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #263247;
+        }
+
+        .logo {
+            color: #38bdf8;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: #cbd5e1;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #38bdf8;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .movie-card {
+            background: #111827;
+            border: 1px solid #263247;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 28px;
+        }
+
+        .movie-card h2 {
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+
+        .movie-details {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .movie-details strong {
+            color: #ffffff;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 30px 0 18px;
+            font-size: 23px;
+        }
+
+        .screen {
+            width: 75%;
+            max-width: 650px;
+            margin: 25px auto 35px;
+            padding: 14px;
+            text-align: center;
+            color: #07111f;
+            font-weight: bold;
+            letter-spacing: 5px;
+            background: linear-gradient(90deg, #38bdf8, #a5f3fc);
+            border-radius: 50% 50% 8px 8px;
+            box-shadow: 0 8px 28px rgba(56, 189, 248, 0.2);
+        }
+
+        .screen-caption {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            margin-top: -25px;
+            margin-bottom: 25px;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin: 25px 0;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .legend-box {
+            width: 17px;
+            height: 17px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .available-box {
+            background: #1e293b;
+            border: 1px solid #64748b;
+        }
+
+        .selected-box {
+            background: #22c55e;
+        }
+
+        .booked-box {
+            background: #64748b;
+        }
+
+        .seating-area {
+            width: 100%;
+            overflow-x: auto;
+            padding: 12px 5px 20px;
+        }
+
+        .seat-map {
+            min-width: 650px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .seat-row {
+            display: grid;
+            grid-template-columns:
+                24px
+                repeat(5, minmax(0, 1fr))
+                24px
+                repeat(5, minmax(0, 1fr));
+            gap: 7px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .row-label {
+            text-align: center;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .seat {
+            min-height: 40px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #64748b;
+            border-radius: 8px 8px 4px 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s ease;
+            user-select: none;
+        }
+
+        .seat input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .seat:hover:not(.booked) {
+            border-color: #38bdf8;
+            background: #263d56;
+            transform: translateY(-2px);
+        }
+
+        .seat:has(input:checked) {
+            background: #22c55e;
+            color: #052e16;
+            border-color: #4ade80;
+            font-weight: bold;
+        }
+
+        .seat.booked {
+            background: #475569;
+            border-color: #475569;
+            color: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .seat.booked input {
+            cursor: not-allowed;
+        }
+
+        .aisle {
+            width: 100%;
+            min-height: 35px;
+        }
+
+        .aisle-label {
+            text-align: center;
+            color: #64748b;
+            font-size: 11px;
+            margin: 12px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        .entry-exit {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin: 25px auto 35px;
+            max-width: 850px;
+        }
+
+        .entry,
+        .exit {
+            border: 1px solid #38bdf8;
+            color: #7dd3fc;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+        }
+
+        .rear-walkway {
+            text-align: center;
+            color: #64748b;
+            margin: 10px 0;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .booking-form {
+            max-width: 650px;
+            margin: 35px auto;
+            background: #111827;
+            border: 1px solid #263247;
+            padding: 25px;
+            border-radius: 14px;
+        }
+
+        .booking-form h2 {
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #080b14;
+            color: #ffffff;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #38bdf8;
+        }
+
+        .booking-summary {
+            background: #080b14;
+            border: 1px solid #263247;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .summary-row strong {
+            color: #4ade80;
+        }
+
+        .book-button {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            background: #0284c7;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .book-button:hover {
+            background: #0369a1;
+        }
+
+        .book-button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .error-message {
+            background: #451a1a;
+            border: 1px solid #ef4444;
+            color: #fecaca;
+        }
+
+        .success-message {
+            background: #052e16;
+            border: 1px solid #22c55e;
+            color: #bbf7d0;
+        }
+
+        .success-message h2 {
+            margin-bottom: 12px;
+        }
+
+        .success-message p {
+            margin: 8px 0;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            text-align: center;
+            color: #64748b;
+            border-top: 1px solid #263247;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 16px 4%;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .container {
+                width: 96%;
+                margin-top: 25px;
+            }
+
+            .page-title {
+                font-size: 26px;
+            }
+
+            .movie-details {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-form {
+                padding: 18px;
+            }
+
+            .entry-exit {
+                gap: 10px;
+            }
+
+            .entry,
+            .exit {
+                padding: 10px 6px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="/" class="logo">MovieHub</a>
+    <a href="/" class="back-link">← Back to Movies</a>
+</header>
+
+<main class="container">
+
+    <h1 class="page-title">Book Your Tickets</h1>
+    <p class="subtitle">Choose your seats and enjoy the movie!</p>
+
+    <section class="movie-card">
+        <h2>{{ showtime.movie.title }}</h2>
+
+        <div class="movie-details">
+            <p>
+                <strong>Genre:</strong>
+                {{ showtime.movie.genre }}
+            </p>
+
+            <p>
+                <strong>Duration:</strong>
+                {{ showtime.movie.duration }}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                {{ showtime.date|date:"d M Y" }}
+            </p>
+
+            <p>
+                <strong>Show Time:</strong>
+                {{ showtime.time|time:"h:i A" }}
+            </p>
+
+            <p>
+                <strong>Screen:</strong>
+                {{ showtime.screen_number }}
+            </p>
+
+            <p>
+                <strong>Price per Seat:</strong>
+                ₹<span id="price">{{ showtime.ticket_price }}</span>
+            </p>
+        </div>
+    </section>
+
+    {% if error %}
+        <div class="message error-message" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if success %}
+
+        <div class="message success-message">
+            <h2>Booking Successful!</h2>
+
+            <p>
+                <strong>Name:</strong>
+                {{ booking_name }}
+            </p>
+
+            <p>
+                <strong>Movie:</strong>
+                {{ showtime.movie.title }}
+            </p>
+
+            <p>
+                <strong>Seats:</strong>
+                {{ booking_seats }}
+            </p>
+
+            <p>
+                <strong>Total Paid:</strong>
+                ₹{{ booking_total }}
+            </p>
+
+            <p>Please save these booking details for your reference.</p>
+        </div>
+
+        <p style="text-align:center; margin:25px;">
+            <a href="/" class="book-link"
+               style="color:#38bdf8; text-decoration:none;">
+                ← Return to Movies
+            </a>
+        </p>
+
+    {% else %}
+
+        <h2 class="section-title">Select Your Seats</h2>
+
+        <div class="screen">SCREEN</div>
+        <p class="screen-caption">FRONT OF THE CINEMA</p>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-box available-box"></span>
+                Available
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-box selected-box"></span>
+                Selected
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-box booked-box"></span>
+                Already Booked
+            </div>
+        </div>
+
+        <div class="seating-area">
+            <div class="seat-map">
+
+                {% for row in seat_rows %}
+                    <div class="seat-row">
+
+                        <span class="row-label">
+                            {{ row.letter }}
+                        </span>
+
+                        {% for seat in row.seats %}
+
+                            <label
+                                class="seat {% if seat.booked %}booked{% endif %}"
+                                title="{% if seat.booked %}{{ seat.id }} is already booked{% else %}Select seat {{ seat.id }}{% endif %}"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    name="selected_seats"
+                                    value="{{ seat.id }}"
+                                    class="seat-checkbox"
+                                    {% if seat.booked %}disabled{% endif %}
+                                    form="bookingForm"
+                                >
+
+                                <span>{{ seat.id }}</span>
+
+                            </label>
+
+                            {% if forloop.counter == 5 %}
+                                <span class="aisle"
+                                      aria-label="Walking aisle"></span>
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <p class="aisle-label">
+            ← MIDDLE WALKING AISLE →
+        </p>
+
+        <div class="rear-walkway">
+            REAR WALKING PATH
+        </div>
+
+        <div class="entry-exit">
+            <div class="entry">ENTRY →</div>
+            <div class="exit">← EXIT</div>
+        </div>
+
+        <form
+            method="POST"
+            action=""
+            id="bookingForm"
+            class="booking-form"
+        >
+            {% csrf_token %}
+
+            <h2>Your Booking Details</h2>
+
+            <div class="form-group">
+                <label for="customer_name">Full Name</label>
+
+                <input
+                    type="text"
+                    id="customer_name"
+                    name="customer_name"
+                    maxlength="100"
+                    autocomplete="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="customer_email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="customer_email"
+                    name="customer_email"
+                    maxlength="254"
+                    autocomplete="email"
+                    placeholder="Enter your email address"
+                    required
+                >
+            </div>
+
+            <div class="booking-summary">
+
+                <div class="summary-row">
+                    <span>Selected Seats:</span>
+                    <strong id="selectedSeats">None</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Number of Tickets:</span>
+                    <strong id="ticketCount">0</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Price per Ticket:</span>
+                    <strong>₹<span id="priceSummary">{{ showtime.ticket_price }}</span></strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Total Amount:</span>
+                    <strong>₹<span id="total">0.00</span></strong>
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="book-button"
+                id="bookButton"
+                disabled
+            >
+                Confirm Booking
+            </button>
+
+        </form>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    © {% now "Y" %} MovieHub | Your Movie Booking Portal
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const checkboxes = document.querySelectorAll(
+            ".seat-checkbox:not(:disabled)"
+        );
+
+        const priceElement = document.getElementById("price");
+        const selectedSeatsElement = document.getElementById("selectedSeats");
+        const ticketCountElement = document.getElementById("ticketCount");
+        const totalElement = document.getElementById("total");
+        const bookButton = document.getElementById("bookButton");
+        const bookingForm = document.getElementById("bookingForm");
+
+        if (
+            !priceElement ||
+            !selectedSeatsElement ||
+            !ticketCountElement ||
+            !totalElement ||
+            !bookButton ||
+            !bookingForm
+        ) {
+            return;
+        }
+
+        const ticketPrice = Number(
+            priceElement.textContent.trim()
+        );
+
+        function updateBookingSummary() {
+            const selected = Array.from(checkboxes)
+                .filter(function (checkbox) {
+                    return checkbox.checked;
+                })
+                .map(function (checkbox) {
+                    return checkbox.value;
+                });
+
+            const total = selected.length * ticketPrice;
+
+            selectedSeatsElement.textContent =
+                selected.length > 0 ? selected.join(", ") : "None";
+
+            ticketCountElement.textContent = selected.length;
+
+            totalElement.textContent = total.toFixed(2);
+
+            bookButton.disabled = selected.length === 0;
+        }
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener(
+                "change",
+                updateBookingSummary
+            );
+        });
+
+        bookingForm.addEventListener("submit", function (event) {
+            const selected = Array.from(checkboxes)
+                .filter(function (checkbox) {
+                    return checkbox.checked;
+                });
+
+            if (selected.length === 0) {
+                event.preventDefault();
+                alert("Please select at least one available seat.");
+                return;
+            }
+
+            bookButton.disabled = true;
+            bookButton.textContent = "Processing Booking...";
+        });
+
+        updateBookingSummary();
+    });
+</script>
+
+</body>
+</html>
+```

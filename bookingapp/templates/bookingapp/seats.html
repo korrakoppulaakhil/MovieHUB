@@ -1,0 +1,1014 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats | MovieHub</title>
+
+    <style>
+        :root {
+            --bg: #080808;
+            --panel: #14130f;
+            --gold: #d4af37;
+            --gold-light: #f5db80;
+            --text: #fffaf0;
+            --muted: #aaa397;
+            --border: #41351e;
+            --booked: #633333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(ellipse at top, #211b0c, transparent 45%),
+                var(--bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1100px, 94%);
+            margin: auto;
+        }
+
+        .navbar {
+            background: #080808;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        .logo span {
+            color: var(--gold-light);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .page-header {
+            padding: 30px 0 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 15px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 5px 12px;
+            border: 1px solid #665329;
+            background: #201a0e;
+            border-radius: 30px;
+            color: var(--gold-light);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(29px, 5vw, 42px);
+            margin: 14px 0;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .gold-text {
+            color: var(--gold-light);
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .panel {
+            margin-bottom: 22px;
+            padding: 22px;
+            background: linear-gradient(145deg, #17150f, #0e0e0c);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        /* CINEMA SCREEN */
+
+        .cinema-screen {
+            width: 80%;
+            max-width: 650px;
+            margin: 35px auto;
+            text-align: center;
+        }
+
+        .screen-light {
+            height: 6px;
+            border-radius: 50%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #fff0ad,
+                var(--gold),
+                #fff0ad,
+                transparent
+            );
+            box-shadow: 0 5px 25px #d4af3760;
+        }
+
+        .screen-label {
+            margin-top: 12px;
+            color: var(--muted);
+            letter-spacing: 4px;
+            font-size: 10px;
+        }
+
+        /* LOGO ANIMATION */
+
+        .logo-animation {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.96);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .logo-animation.play {
+            animation: overlayReveal 1.9s ease forwards;
+        }
+
+        .logo-animation img {
+            width: min(65vw, 340px);
+            max-height: 65vh;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.2) rotate(-12deg);
+            filter: drop-shadow(0 0 18px #008cff);
+        }
+
+        .logo-animation.play img {
+            animation: logoReveal 1.9s ease-in-out forwards;
+        }
+
+        .animation-caption {
+            margin-top: 18px;
+            color: var(--gold-light);
+            letter-spacing: 5px;
+            font-size: 12px;
+            opacity: 0;
+        }
+
+        .logo-animation.play .animation-caption {
+            animation: captionReveal 1.9s ease forwards;
+        }
+
+        @keyframes overlayReveal {
+            0% {
+                opacity: 0;
+                visibility: visible;
+            }
+
+            15%, 75% {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes logoReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) rotate(-12deg);
+            }
+
+            35% {
+                opacity: 1;
+                transform: scale(1.08) rotate(3deg);
+                filter:
+                    brightness(1.3)
+                    drop-shadow(0 0 25px #00aaff)
+                    drop-shadow(0 0 45px #0055ff);
+            }
+
+            55% {
+                opacity: 1;
+                transform: scale(0.98) rotate(0);
+            }
+
+            75% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes captionReveal {
+            0%, 25% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            45%, 75% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+        }
+
+        /* SEAT CATEGORIES */
+
+        .seat-section {
+            margin: 28px 0;
+            padding: 20px;
+            background: #0c0c0a;
+            border: 1px solid #30291b;
+            border-radius: 12px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-heading h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .section-heading p {
+            margin: 3px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .section-price {
+            color: var(--gold-light);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(10, minmax(0, 1fr));
+            gap: 10px 8px;
+        }
+
+        .seat-label {
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .seat-label input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .seat {
+            width: 100%;
+            min-width: 0;
+            max-width: 48px;
+            height: 34px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #211d13;
+            color: #e8d89d;
+            border: 1px solid #655329;
+            border-radius: 6px 6px 3px 3px;
+            font-size: 10px;
+            transition: 0.2s;
+        }
+
+        .seat-label:hover .seat {
+            border-color: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .seat-label input:checked + .seat {
+            background: linear-gradient(135deg, #ffe99a, #c49a2d);
+            color: #100d05;
+            border-color: #fff0ad;
+            box-shadow: 0 0 13px #d4af3760;
+        }
+
+        .seat-label input:focus-visible + .seat {
+            outline: 2px solid white;
+            outline-offset: 3px;
+        }
+
+        .seat-label.booked {
+            cursor: not-allowed;
+        }
+
+        .seat-label.booked .seat {
+            background: var(--booked);
+            border-color: #794545;
+            color: #d8aaaa;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        /* LEGEND */
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .legend-box {
+            width: 17px;
+            height: 15px;
+            border-radius: 4px;
+            border: 1px solid #655329;
+            background: #211d13;
+        }
+
+        .legend-box.selected {
+            background: var(--gold);
+        }
+
+        .legend-box.booked {
+            background: var(--booked);
+        }
+
+        /* BOOKING FORM */
+
+        .booking-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ead9a0;
+            margin-bottom: 7px;
+            font-size: 13px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            min-height: 44px;
+            color: var(--text);
+            background: #080808;
+            border: 1px solid #443a25;
+            border-radius: 7px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        /* SUMMARY */
+
+        .summary-card {
+            padding: 22px;
+            border: 1px solid #625027;
+            border-radius: 12px;
+            background:
+                radial-gradient(circle at top right, #302613, transparent 60%),
+                #11110d;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 13px 0;
+            font-size: 13px;
+        }
+
+        .summary-line span:first-child {
+            color: var(--muted);
+        }
+
+        .summary-line span:last-child {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 18px 0;
+        }
+
+        .total-line {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .total-line span:last-child {
+            color: var(--gold-light);
+            font-size: 22px;
+        }
+
+        .gold-button {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #f4d675, #bd9026);
+            color: #100d05;
+            border: 0;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .gold-button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .outline-button {
+            width: 100%;
+            display: block;
+            text-align: center;
+            padding: 11px;
+            margin-top: 11px;
+            color: #ead9a0;
+            border: 1px solid #625027;
+            border-radius: 8px;
+        }
+
+        .notice,
+        .form-hint {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #241d0e;
+            border: 1px solid #65501d;
+            color: #f4dc8b;
+            border-radius: 8px;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 25px 0;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 760px) {
+            .booking-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px 0;
+            }
+
+            .panel,
+            .seat-section {
+                padding: 13px;
+            }
+
+            .seat-grid {
+                gap: 7px 4px;
+            }
+
+            .seat {
+                height: 29px;
+                font-size: 9px;
+            }
+
+            .legend {
+                gap: 10px;
+            }
+
+            .logo-animation img {
+                width: 75vw;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo-animation.play,
+            .logo-animation.play img,
+            .logo-animation.play .animation-caption {
+                animation-duration: 0.01ms;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container nav-inner">
+
+            <a href="{% url 'home' %}" class="logo">
+                Movie<span>Hub</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'movie_detail' movie.id %}">Movie Details</a>
+                <a href="{% url 'booking_history' %}">My Bookings</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- ANIMATED AKHIL LOGO -->
+    <div class="logo-animation" id="logo-animation" aria-hidden="true">
+        <img src="{% static 'bookingapp/akhil_logo.png' %}" alt="AKHIL logo">
+        <div class="animation-caption">MOVIEHUB EXPERIENCE</div>
+    </div>
+
+
+    <main class="container">
+
+        <section class="page-header">
+
+            <div class="breadcrumb">
+                <a href="{% url 'home' %}">Home</a>
+                &nbsp; / &nbsp;
+                <a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a>
+                &nbsp; / &nbsp;
+                <span class="gold-text">Select Seats</span>
+            </div>
+
+            <span class="eyebrow">Premium Cinema Experience</span>
+
+            <h1>Choose Your <span class="gold-text">Seats</span></h1>
+
+            <div class="muted">
+                <strong>{{ movie.title }}</strong>
+                &nbsp; | &nbsp;
+                {{ showtime.date|date:"D, d M Y" }}
+                &nbsp; | &nbsp;
+                {{ showtime.time|time:"g:i A" }}
+            </div>
+
+        </section>
+
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message" role="status">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <section class="panel">
+
+            <h2>Cinema Seating</h2>
+
+            <p class="muted">
+                Choose seats from any category. The total updates
+                automatically according to each seat's price.
+            </p>
+
+            <div class="cinema-screen">
+                <div class="screen-light"></div>
+                <div class="screen-label">SCREEN THIS WAY</div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-box"></span>
+                    Available
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-box selected"></span>
+                    Selected
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-box booked"></span>
+                    Booked
+                </div>
+            </div>
+
+
+            {% for section in seat_sections %}
+
+                <section class="seat-section">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>{{ section.name }}</h3>
+                            <p>{{ section.seats|length }} seats in this category</p>
+                        </div>
+
+                        <div class="section-price">
+                            ₹{{ section.price }} per seat
+                        </div>
+                    </div>
+
+                    <div class="seat-grid">
+
+                        {% for seat in section.seats %}
+
+                            {% if seat.name in booked_seats %}
+
+                                <span class="seat-label booked"
+                                      title="{{ seat.name }} is booked">
+                                    <span class="seat">{{ seat.name }}</span>
+                                </span>
+
+                            {% else %}
+
+                                <label class="seat-label"
+                                       title="{{ seat.name }} - ₹{{ section.price }}">
+
+                                    <input
+                                        type="checkbox"
+                                        class="seat-checkbox"
+                                        value="{{ seat.name }}"
+                                        data-price="{{ section.price }}"
+                                        data-category="{{ section.name }}"
+                                        aria-label="Seat {{ seat.name }}, {{ section.name }}, ₹{{ section.price }}"
+                                    >
+
+                                    <span class="seat">{{ seat.name }}</span>
+
+                                </label>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+            {% endfor %}
+
+        </section>
+
+
+        <form method="post" id="booking-form">
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="selected_seats"
+                id="selected_seats"
+                value=""
+            >
+
+            <section class="booking-layout">
+
+                <div class="panel">
+
+                    <h2>Your Details</h2>
+
+                    <div class="form-group">
+                        <label for="customer_name">Full Name</label>
+
+                        <input
+                            type="text"
+                            id="customer_name"
+                            name="customer_name"
+                            maxlength="100"
+                            autocomplete="name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer_email">Email Address</label>
+
+                        <input
+                            type="email"
+                            id="customer_email"
+                            name="customer_email"
+                            maxlength="254"
+                            autocomplete="email"
+                            placeholder="Enter your email address"
+                            required
+                        >
+                    </div>
+
+                    <p class="form-hint">
+                        Review your seats and total before confirming.
+                    </p>
+
+                </div>
+
+
+                <aside class="summary-card">
+
+                    <h2>Booking <span class="gold-text">Summary</span></h2>
+
+                    <div class="summary-line">
+                        <span>Movie</span>
+                        <span>{{ movie.title }}</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Date</span>
+                        <span>{{ showtime.date|date:"d M Y" }}</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Showtime</span>
+                        <span>{{ showtime.time|time:"g:i A" }}</span>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="summary-line">
+                        <span>Seat Count</span>
+                        <span id="seat-count">0</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Selected Seats</span>
+                        <span id="seat-numbers">None</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Ground</span>
+                        <span id="ground-total">₹0.00</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Premium</span>
+                        <span id="premium-total">₹0.00</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Recliner</span>
+                        <span id="recliner-total">₹0.00</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span>Box</span>
+                        <span id="box-total">₹0.00</span>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="summary-line total-line">
+                        <span>Total</span>
+                        <span id="total-amount">₹0.00</span>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="gold-button"
+                        id="book-button"
+                        disabled
+                    >
+                        Confirm Demo Booking
+                    </button>
+
+                    <a
+                        href="{% url 'movie_detail' movie.id %}"
+                        class="outline-button"
+                    >
+                        Back to Movie
+                    </a>
+
+                    <p class="notice">
+                        Demo booking only. No online payment is processed.
+                    </p>
+
+                </aside>
+
+            </section>
+
+        </form>
+
+    </main>
+
+
+    <footer>
+        <div class="container">
+            &copy; {% now "Y" %} MovieHub
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const checkboxes = Array.from(
+                document.querySelectorAll(".seat-checkbox")
+            );
+
+            const hiddenSeats = document.getElementById("selected_seats");
+            const seatCount = document.getElementById("seat-count");
+            const seatNumbers = document.getElementById("seat-numbers");
+            const totalAmount = document.getElementById("total-amount");
+            const bookButton = document.getElementById("book-button");
+            const bookingForm = document.getElementById("booking-form");
+            const logoAnimation = document.getElementById("logo-animation");
+
+            let animationTimer = null;
+
+            function formatRupees(amount) {
+                return Number(amount).toLocaleString("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    minimumFractionDigits: 2
+                });
+            }
+
+            function animateLogo() {
+                if (!logoAnimation) return;
+
+                logoAnimation.classList.remove("play");
+
+                // Restart the animation for every new seat selection.
+                void logoAnimation.offsetWidth;
+
+                logoAnimation.classList.add("play");
+
+                if (animationTimer) {
+                    clearTimeout(animationTimer);
+                }
+
+                animationTimer = setTimeout(function () {
+                    logoAnimation.classList.remove("play");
+                }, 2000);
+            }
+
+            function updateSummary() {
+                const selected = checkboxes.filter(function (checkbox) {
+                    return checkbox.checked;
+                });
+
+                let ground = 0;
+                let premium = 0;
+                let recliner = 0;
+                let box = 0;
+
+                selected.forEach(function (checkbox) {
+                    const price = Number(checkbox.dataset.price);
+                    const category = checkbox.dataset.category;
+
+                    if (category === "Ground") {
+                        ground += price;
+                    } else if (category === "Premium") {
+                        premium += price;
+                    } else if (category === "Recliner") {
+                        recliner += price;
+                    } else if (category === "Box") {
+                        box += price;
+                    }
+                });
+
+                hiddenSeats.value = selected.map(
+                    function (checkbox) {
+                        return checkbox.value;
+                    }
+                ).join(", ");
+
+                seatCount.textContent = String(selected.length);
+
+                seatNumbers.textContent = selected.length
+                    ? selected.map(function (checkbox) {
+                        return checkbox.value;
+                    }).join(", ")
+                    : "None";
+
+                document.getElementById("ground-total").textContent =
+                    formatRupees(ground);
+
+                document.getElementById("premium-total").textContent =
+                    formatRupees(premium);
+
+                document.getElementById("recliner-total").textContent =
+                    formatRupees(recliner);
+
+                document.getElementById("box-total").textContent =
+                    formatRupees(box);
+
+                totalAmount.textContent =
+                    formatRupees(ground + premium + recliner + box);
+
+                bookButton.disabled = selected.length === 0;
+            }
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.addEventListener("change", function () {
+                    updateSummary();
+
+                    if (checkbox.checked) {
+                        animateLogo();
+                    }
+                });
+            });
+
+            bookingForm.addEventListener("submit", function (event) {
+                const selected = checkboxes.filter(
+                    function (checkbox) {
+                        return checkbox.checked;
+                    }
+                );
+
+                if (selected.length === 0) {
+                    event.preventDefault();
+                    alert("Please select at least one seat.");
+                    return;
+                }
+
+                hiddenSeats.value = selected.map(
+                    function (checkbox) {
+                        return checkbox.value;
+                    }
+                ).join(", ");
+            });
+
+            updateSummary();
+        });
+    </script>
+
+</body>
+</html>

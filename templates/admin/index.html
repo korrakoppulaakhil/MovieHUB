@@ -1,0 +1,514 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<style>
+    /* MAIN DASHBOARD */
+
+    .moviehub-dashboard {
+        width: 100%;
+    }
+
+    .moviehub-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(250px, 0.9fr);
+        gap: 25px;
+        align-items: start;
+    }
+
+    /* ADMIN MODELS PANEL */
+
+    .moviehub-apps {
+        min-width: 0;
+    }
+
+    .moviehub-apps .module {
+        margin-bottom: 22px;
+        overflow: hidden;
+        border: 1px solid #6b5628 !important;
+        border-radius: 9px;
+        background: rgba(10, 10, 10, 0.90) !important;
+    }
+
+    .moviehub-apps .module caption {
+        padding: 12px 15px;
+        text-align: left;
+        background: rgba(35, 28, 13, 0.96) !important;
+        color: #f5db80 !important;
+        border-bottom: 1px solid #d4af37;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .moviehub-apps .module caption a {
+        color: #f5db80 !important;
+        text-decoration: none;
+    }
+
+    .moviehub-apps .module th,
+    .moviehub-apps .module td {
+        padding: 10px;
+        border-bottom: 1px solid #30291b;
+    }
+
+    .moviehub-apps .module tr:nth-child(even) {
+        background: rgba(35, 30, 19, 0.80);
+    }
+
+    .moviehub-apps .module th {
+        text-align: left;
+        font-weight: normal;
+    }
+
+    .moviehub-apps .module th a {
+        color: #f5db80 !important;
+    }
+
+    .moviehub-apps .module td {
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .moviehub-apps .addlink,
+    .moviehub-apps .changelink {
+        display: inline-block;
+        margin: 2px;
+        padding: 5px 9px;
+        border: 1px solid #665329;
+        border-radius: 5px;
+        background: #17150f;
+        color: #f5db80 !important;
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+    .moviehub-apps .addlink:hover,
+    .moviehub-apps .changelink:hover {
+        background: #302613;
+    }
+
+    /* WEBSITE VISITOR PANEL */
+
+    .moviehub-visitors {
+        padding: 22px;
+        border: 1px solid #d4af37;
+        border-radius: 11px;
+        background: rgba(10, 10, 10, 0.94);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .moviehub-visitors h2 {
+        margin: 0 0 8px;
+        color: #f5db80;
+        font-size: 22px;
+    }
+
+    .moviehub-visitors > p {
+        margin: 0 0 22px;
+        color: #aaa397;
+        font-size: 13px;
+    }
+
+    .moviehub-stat {
+        padding: 17px;
+        margin-bottom: 14px;
+        border: 1px solid #443820;
+        border-radius: 8px;
+        background: rgba(35, 28, 13, 0.65);
+    }
+
+    .moviehub-stat-label {
+        display: block;
+        color: #aaa397;
+        font-size: 12px;
+        margin-bottom: 7px;
+    }
+
+    .moviehub-stat-value {
+        display: block;
+        color: #f5db80;
+        font-size: 32px;
+        line-height: 1.2;
+        font-weight: bold;
+        overflow-wrap: anywhere;
+    }
+
+    .moviehub-visitor-link {
+        display: block;
+        margin-top: 18px;
+        padding: 13px;
+        border: 1px solid #d4af37;
+        border-radius: 7px;
+        background: linear-gradient(135deg, #f5db80, #bd9026);
+        color: #100d05 !important;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .moviehub-visitor-link:hover {
+        filter: brightness(1.1);
+    }
+
+    .moviehub-dashboard-note {
+        margin-top: 15px;
+        color: #aaa397;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    /* MOVIE MANAGEMENT PANEL */
+
+    .moviehub-movies-panel {
+        margin-top: 25px;
+        padding: 22px;
+        border: 1px solid #d4af37;
+        border-radius: 11px;
+        background: rgba(10, 10, 10, 0.94);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.20);
+    }
+
+    .moviehub-movies-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .moviehub-movies-header h2 {
+        margin: 0 0 7px;
+        color: #f5db80;
+        font-size: 22px;
+    }
+
+    .moviehub-movies-header p {
+        margin: 0;
+        color: #aaa397;
+        font-size: 13px;
+    }
+
+    .moviehub-add-button,
+    .moviehub-edit-button {
+        display: inline-block;
+        padding: 10px 14px;
+        border: 1px solid #d4af37;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #f5db80, #bd9026);
+        color: #100d05 !important;
+        font-weight: bold;
+        text-decoration: none;
+        text-align: center;
+        transition: filter 0.2s ease;
+    }
+
+    .moviehub-movies-list {
+        display: grid;
+        gap: 10px;
+    }
+
+    .moviehub-movie-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        padding: 14px;
+        border: 1px solid #443820;
+        border-radius: 7px;
+        background: rgba(35, 28, 13, 0.65);
+    }
+
+    .moviehub-movie-info {
+        display: grid;
+        gap: 6px;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .moviehub-movie-info strong {
+        color: #f5db80;
+        font-size: 16px;
+        overflow-wrap: anywhere;
+    }
+
+    .moviehub-movie-info span {
+        color: #aaa397;
+        font-size: 13px;
+    }
+
+    .moviehub-all-movies {
+        display: inline-block;
+        margin-top: 18px;
+        color: #f5db80 !important;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .moviehub-no-movies {
+        color: #aaa397;
+        padding: 15px 0;
+    }
+
+    .moviehub-add-button:hover,
+    .moviehub-edit-button:hover {
+        filter: brightness(1.15);
+    }
+
+    .moviehub-all-movies:hover {
+        text-decoration: underline;
+    }
+
+    /* RESPONSIVE LAYOUT */
+
+    @media (max-width: 850px) {
+        .moviehub-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .moviehub-visitors {
+            grid-row: 1;
+        }
+
+        .moviehub-apps .module {
+            overflow-x: auto;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .moviehub-visitors,
+        .moviehub-movies-panel {
+            padding: 15px;
+        }
+
+        .moviehub-movie-row {
+            align-items: flex-start;
+        }
+
+        .moviehub-edit-button {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+
+<div id="content-main" class="moviehub-dashboard">
+
+    <!-- ADMIN MODELS AND VISITOR STATISTICS -->
+
+    <div class="moviehub-layout">
+
+        <!-- LEFT: ADMIN MODELS -->
+
+        <section class="moviehub-apps" aria-label="Admin management">
+
+            {% if app_list %}
+
+                {% for app in app_list %}
+
+                    <div class="module app-{{ app.app_label }}">
+
+                        <table>
+
+                            <caption>
+                                {% if app.app_url %}
+                                    <a href="{{ app.app_url }}">
+                                        {{ app.name }}
+                                    </a>
+                                {% else %}
+                                    {{ app.name }}
+                                {% endif %}
+                            </caption>
+
+                            <tbody>
+
+                                {% for model in app.models %}
+
+                                    <tr class="model-{{ model.object_name|lower }}">
+
+                                        <th scope="row">
+
+                                            {% if model.admin_url %}
+                                                <a href="{{ model.admin_url }}">
+                                                    {{ model.name }}
+                                                </a>
+                                            {% else %}
+                                                {{ model.name }}
+                                            {% endif %}
+
+                                        </th>
+
+                                        <td>
+
+                                            {% if model.add_url %}
+                                                <a href="{{ model.add_url }}"
+                                                   class="addlink">
+                                                    {% translate "Add" %}
+                                                </a>
+                                            {% endif %}
+
+                                        </td>
+
+                                        <td>
+
+                                            {% if model.admin_url %}
+                                                <a href="{{ model.admin_url }}"
+                                                   class="changelink">
+                                                    {% translate "View / Change" %}
+                                                </a>
+                                            {% endif %}
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="module">
+                    <p>You do not have permission to view any models.</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- RIGHT: WEBSITE VISITOR STATISTICS -->
+
+        <aside class="moviehub-visitors">
+
+            <h2>Website Visitors</h2>
+
+            <p>MovieHub website activity</p>
+
+            <div class="moviehub-stat">
+
+                <span class="moviehub-stat-label">
+                    Recorded Unique Browsers
+                </span>
+
+                <span class="moviehub-stat-value">
+                    {{ moviehub_unique_visitors|default:0 }}
+                </span>
+
+            </div>
+
+            <div class="moviehub-stat">
+
+                <span class="moviehub-stat-label">
+                    Total Page Views
+                </span>
+
+                <span class="moviehub-stat-value">
+                    {{ moviehub_total_page_views|default:0 }}
+                </span>
+
+            </div>
+
+            <a href="{% url 'admin:bookingapp_websitevisitor_changelist' %}"
+               class="moviehub-visitor-link">
+                View Visitors →
+            </a>
+
+            <div class="moviehub-dashboard-note">
+                Visitor counts are based on recorded browser IDs.
+                They are estimates, not verified counts of individual people.
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- MOVIE MANAGEMENT -->
+
+    <section class="moviehub-movies-panel">
+
+        <div class="moviehub-movies-header">
+
+            <div>
+
+                <h2>🎬 Movie Management</h2>
+
+                <p>
+                    Total movies:
+                    {{ moviehub_movie_count|default:0 }}
+                </p>
+
+            </div>
+
+            <a href="{% url 'admin:bookingapp_movie_add' %}"
+               class="moviehub-add-button">
+                + Add Movie
+            </a>
+
+        </div>
+
+
+        {% if moviehub_movies %}
+
+            <div class="moviehub-movies-list">
+
+                {% for movie in moviehub_movies %}
+
+                    <div class="moviehub-movie-row">
+
+                        <div class="moviehub-movie-info">
+
+                            <strong>
+                                {{ movie.title }}
+                            </strong>
+
+                            <span>
+                                {{ movie.genre }}
+
+                                {% if movie.language %}
+                                    · {{ movie.language }}
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+                        <a href="{% url 'admin:bookingapp_movie_change' movie.pk %}"
+                           class="moviehub-edit-button">
+                            Edit / Update
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <a href="{% url 'admin:bookingapp_movie_changelist' %}"
+               class="moviehub-all-movies">
+                View All Movies →
+            </a>
+
+        {% else %}
+
+            <p class="moviehub-no-movies">
+                No movies have been added yet.
+                Click "Add Movie" to add your first movie.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}
