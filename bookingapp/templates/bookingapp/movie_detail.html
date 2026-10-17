@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ movie.title }} | MovieHub</title>
+    <title>{{ movie.title }} | AK_CineVerse</title>
 
     <style>
         :root {
@@ -528,7 +528,7 @@
                         {% if showtime.screen %}
                             {{ showtime.screen.theatre.name }}
                         {% else %}
-                            MovieHub Cinema
+                            AK_CineVerse Cinema
                         {% endif %}
                     </h3>
 
@@ -669,7 +669,7 @@
             <a href="{% url 'home' %}" class="logo">Movie<span>Hub</span></a>
             <p>Premium movie discovery and demo ticket booking.</p>
         </div>
-        <div>&copy; {% now "Y" %} MovieHub</div>
+        <div>&copy; {% now "Y" %} AK_CineVerse</div>
     </div>
 </footer>
 
