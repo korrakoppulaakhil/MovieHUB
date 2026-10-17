@@ -55,11 +55,21 @@
         }
 
         .logo {
-            font-size: 27px;
+            display: inline-block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 29px;
             font-weight: 900;
+            letter-spacing: -1.2px;
+            color: #fffaf0;
+            text-shadow: 0 2px 14px rgba(244, 214, 117, 0.2);
         }
 
-        .logo span { color: var(--gold-light); }
+        .logo span {
+            color: var(--gold-light);
+            background: linear-gradient(110deg, #fff0a8, #d4af37 65%, #fff0a8);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .nav-links {
             display: flex;
@@ -410,7 +420,7 @@
 
 <header class="navbar">
     <div class="container nav-content">
-        <a href="{% url 'home' %}" class="logo">AK_CineVerse</a>
+        <a href="{% url 'home' %}" class="logo">AK_<span>CineVerse</span></a>
 
         <nav class="nav-links">
             <a href="{% url 'home' %}">Home</a>
@@ -669,7 +679,7 @@
 <footer>
     <div class="container footer-content">
         <div>
-            <a href="{% url 'home' %}" class="logo">Movie<span>Hub</span></a>
+            <a href="{% url 'home' %}" class="logo">AK_<span>CineVerse</span></a>
             <p>Your destination for discovering movies and booking cinema tickets.</p>
         </div>
         <div>
