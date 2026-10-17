@@ -31,26 +31,3 @@ The project uses WhiteNoise to serve collected static files. A local SQLite
 database is used only when `DATABASE_URL` is not configured; Render's local
 filesystem is ephemeral, so SQLite is not suitable for persistent production
 data.
-
-## Admin password reset email
-
-The admin login page includes a password reset link. Reset requests only send
-email to active staff accounts that have an email address. You can also set
-`ADMIN_PASSWORD_RESET_EMAIL` in Render to a backup email address for password
-recovery. The backup address works only when there is exactly one active
-superuser, and reset links are sent to the address entered on the reset form.
-Configure an SMTP provider in the Render web service environment so reset
-emails can be delivered:
-
-- `EMAIL_HOST`: SMTP server hostname
-- `EMAIL_PORT`: SMTP port (commonly `587`)
-- `EMAIL_USE_TLS`: `true` for STARTTLS (commonly used with port `587`)
-- `EMAIL_HOST_USER`: SMTP account username
-- `EMAIL_HOST_PASSWORD`: SMTP password or provider-issued app password
-- `DEFAULT_FROM_EMAIL`: sender address accepted by the SMTP provider
-- `ADMIN_PASSWORD_RESET_EMAIL`: optional backup address for the single active
-  superuser account
-
-Keep SMTP credentials private and enter them only in Render's environment
-settings. Add the backup address there as well. In local development, reset
-emails are printed to the runserver console by default.

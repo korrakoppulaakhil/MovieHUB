@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Booking Confirmation | AK_CineVerse</title>
+    <title>Booking Confirmation | MovieHub</title>
 
     <style>
         :root {
@@ -59,18 +59,12 @@
         }
 
         .logo {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
-            letter-spacing: -1.2px;
-            text-shadow: 0 2px 14px rgba(244, 214, 117, 0.2);
         }
 
         .logo span {
             color: var(--gold-light);
-            background: linear-gradient(110deg, #fff0a8, #d4af37 65%, #fff0a8);
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .nav-links {
@@ -428,7 +422,7 @@
         <div class="container nav-inner">
 
             <a href="{% url 'home' %}" class="logo">
-                AK_<span>CineVerse</span>
+                Movie<span>Hub</span>
             </a>
 
             <nav class="nav-links">
@@ -468,7 +462,7 @@
                 </h1>
 
                 <p class="muted">
-                    Find your AK_CineVerse booking records using your email.
+                    Find your MovieHub booking records using your email.
                 </p>
 
             {% endif %}
@@ -494,7 +488,7 @@
                     <div class="booking-heading">
 
                         <div>
-                            <span class="eyebrow">AK_CineVerse Ticket</span>
+                            <span class="eyebrow">MovieHub Ticket</span>
 
                             <h2>{{ booking.showtime.movie.title }}</h2>
 
@@ -568,7 +562,7 @@
                                 {% if booking.showtime.screen %}
                                     {{ booking.showtime.screen.theatre.name }}
                                 {% else %}
-                                    AK_CineVerse Cinema
+                                    MovieHub Cinema
                                 {% endif %}
                             </span>
                         </div>
@@ -718,7 +712,7 @@
 
     <footer>
         <div class="container">
-            &copy; {% now "Y" %} AK_CineVerse. Premium Cinema Experience.
+            &copy; {% now "Y" %} MovieHub. Premium Cinema Experience.
         </div>
     </footer>
 

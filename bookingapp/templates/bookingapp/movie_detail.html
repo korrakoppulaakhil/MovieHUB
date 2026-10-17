@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ movie.title }} | AK_CineVerse</title>
+    <title>{{ movie.title }} | MovieHub</title>
 
     <style>
         :root {
@@ -48,20 +48,9 @@
             gap: 18px;
         }
 
-        .logo {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: -1.2px;
-            text-shadow: 0 2px 14px rgba(244, 214, 117, 0.2);
-        }
+        .logo { font-size: 25px; font-weight: 900; }
 
-        .logo span {
-            color: var(--gold-light);
-            background: linear-gradient(110deg, #fff0a8, #d4af37 65%, #fff0a8);
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .logo span { color: var(--gold-light); }
 
         .nav-links {
             display: flex;
@@ -397,7 +386,7 @@
 
 <header class="navbar">
     <div class="container nav-inner">
-        <a href="{% url 'home' %}" class="logo">AK_<span>CineVerse</span></a>
+        <a href="{% url 'home' %}" class="logo">Movie<span>Hub</span></a>
 
         <nav class="nav-links">
             <a href="{% url 'home' %}">Home</a>
@@ -539,7 +528,7 @@
                         {% if showtime.screen %}
                             {{ showtime.screen.theatre.name }}
                         {% else %}
-                            AK_CineVerse Cinema
+                            MovieHub Cinema
                         {% endif %}
                     </h3>
 
@@ -677,10 +666,10 @@
 <footer>
     <div class="container footer-inner">
         <div>
-            <a href="{% url 'home' %}" class="logo">AK_<span>CineVerse</span></a>
+            <a href="{% url 'home' %}" class="logo">Movie<span>Hub</span></a>
             <p>Premium movie discovery and demo ticket booking.</p>
         </div>
-        <div>&copy; {% now "Y" %} AK_CineVerse</div>
+        <div>&copy; {% now "Y" %} MovieHub</div>
     </div>
 </footer>
 
