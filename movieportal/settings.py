@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 import os
+import warnings
 from pathlib import Path
 
 import dj_database_url
-from django.core.exceptions import ImproperlyConfigured
 from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,16 +24,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-# Set DEBUG=false and provide DJANGO_SECRET_KEY in production.
+# Set DEBUG=false and provide a persistent secret key in production.
 DEBUG = os.environ.get(
     "DEBUG", "false" if os.environ.get("RENDER") else "true"
 ).lower() in {"1", "true", "yes"}
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
-    if not DEBUG:
-        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set when DEBUG is false.")
     SECRET_KEY = get_random_secret_key()
+    if not DEBUG:
+        warnings.warn(
+            "DJANGO_SECRET_KEY is not set; a temporary key was generated. "
+            "Set DJANGO_SECRET_KEY in Render to keep sessions and signed data "
+            "valid across restarts.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
 
 ALLOWED_HOSTS = [
     host.strip()

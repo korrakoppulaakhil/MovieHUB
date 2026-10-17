@@ -17,8 +17,11 @@ Create a Render **Web Service** from this repository with:
 - **Build Command:** `pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate`
 - **Start Command:** `gunicorn movieportal.wsgi:application`
 
-In the Render service environment, set `DJANGO_SECRET_KEY` to a generated
-secret and `DEBUG` to `false`. Attach a Render PostgreSQL database and make its
+In the Render service environment, set `DJANGO_SECRET_KEY` to a persistent,
+generated secret and `DEBUG` to `false`. The app accepts `SECRET_KEY` as an
+alias and generates a temporary key if neither variable is present, so the
+service can still start; that temporary key changes on restarts and invalidates
+sessions and signed data. Attach a Render PostgreSQL database and make its
 internal connection URL available to the service as `DATABASE_URL`. Render
 sets `RENDER_EXTERNAL_HOSTNAME` for the service; the app uses it for allowed
 hosts and HTTPS CSRF requests. If using a custom domain, add it to
